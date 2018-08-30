@@ -15,7 +15,10 @@
   		margin:0px;
   		padding: 0px;
   		overflow-x: hidden;
-  		overflow-y: hidden;
+  		overflow-y: auto;
+  	}
+  	.login{
+  		padding: 20px 10px 20px 10px;
   	}
   </style>
 </head>
@@ -96,7 +99,7 @@
 				<div class="login-2">
 					<form id="send_message">
 						<div class="row">
-							<form>
+							<form action="#">
 								<div class="col-xs-1">
 									<img src="img/boy.jpeg" class="media-object img-circle" style="width:30px;height: 30px;display: inline-block;">
 								</div>
@@ -109,18 +112,10 @@
 						</div>
 					</form>
 				</div>
-
-				<div class="login" style="padding: 40px 10px 40px 10px;">
-					<div class="media">
-					  <div class="media-left">
-					    <img src="img/boy.jpeg" class="media-object img-circle" style="width:80px;height: 80px;">
-					  </div>
-					  <div class="media-body">
-					    <h4 class="media-heading">John Doe</h4>
-					    <p style="width: 90%;line-height: 15px;"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy </p>
-					  </div>
-					</div>
+				<div id="feed">
+					
 				</div>
+
 			</div><!--col-5-->
 
 			<div class="col-md-3" style="padding-left: 0px;">
@@ -186,20 +181,26 @@
 		</div><!--main-row-->
 	<script type="text/javascript">
 	
+		var messages = []
+
 		$('#send_message').on("submit",function(){
 			var msg = $('#message').val()
 			if(msg.trim()==""){ // Blank Message submit
 				return false;
 			}else if (msg.length<=50){ // Normal message no need to split.
 				console.log(msg)
+				messages.push(msg)
+				generateFeed(messages)
 			}else{ // Message with more then 50 characters
 				result = splitMessage(msg)
 				if(result){ // Valid message result in array of splited messages
 					console.log(result)
+					generateFeed(result)
 				}else{ // Invalid message
 					alert("Invalid message")
 				}
 			}
+			$('#message').val("")
 			return false;
 		})
 
@@ -228,10 +229,27 @@
 			// console.log(msgResult)
 			for(i=0;i<msgResult.length;i++){
 				msgResult[i] = (i+1)+"/"+msgResult.length+" "+msgResult[i]
+				messages.push(msgResult[i])
 			}
 			return msgResult
 		}
 
+		function generateFeed(messages){
+					for(j=0;j<messages.length;j++){
+						$('#feed').append(`<div class="login">
+						<div class="media">
+						  <div class="media-left">
+						    <img src="img/boy.jpeg" class="media-object img-circle" style="width:50px;height: 50px;">
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading">John Doe</h4>
+						    <p style="width: 90%;line-height: 15px;">`+messages[j]+` </p>
+						  </div>
+						</div>
+					</div>`)
+					}
+				
+		}
 	</script>
 		
 	</div>
